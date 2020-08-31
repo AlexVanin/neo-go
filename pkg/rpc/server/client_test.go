@@ -215,7 +215,7 @@ func TestCreateNEP5TransferTx(t *testing.T) {
 	tx, err := c.CreateNEP5TransferTx(acc, util.Uint160{}, client.GasContractHash, 1000, 0)
 	require.NoError(t, err)
 	require.NoError(t, acc.SignTx(tx))
-	require.NoError(t, chain.VerifyTx(tx))
+	require.NoError(t, chain.VerifyTx(tx, nil))
 	v := chain.GetTestVM(tx)
 	v.LoadScriptWithFlags(tx.Script, smartcontract.All)
 	require.NoError(t, v.Run())
