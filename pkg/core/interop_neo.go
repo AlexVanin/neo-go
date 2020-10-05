@@ -126,7 +126,12 @@ func contractUpdate(ic *interop.Context) error {
 	if len(manifestBytes) > manifest.MaxManifestSize {
 		return errors.New("manifest is too big")
 	}
-	if !ic.VM.AddGas(int64(StoragePrice * (len(script) + len(manifestBytes)))) {
+	// FIXME remove after https://github.com/neo-project/neo/pull/1990 is merged.
+	sz := len(script)
+	if sz == 0 {
+		sz = len(manifestBytes)
+	}
+	if !ic.VM.AddGas(int64(sz) * StoragePrice) {
 		return errGasLimitExceeded
 	}
 	// if script was provided, update the old contract script and Manifest.ABI hash
